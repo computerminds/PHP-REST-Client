@@ -73,6 +73,14 @@ class Response implements IResponse {
             strtok($token); // also slip next HTTP TAG
         }
 
+        // Proxy connection support.
+        if (stripos($line, ' 200 Connection established') !== false && stripos($line, 'HTTP') === 0) {
+            do {
+                $line = strtok($token);
+            } while (0 < strlen(trim($line)));
+            strtok($token); // also slip next HTTP TAG
+        }
+
         while (0 < strlen(trim($line = strtok($token)))) {
             $this->parseResponseHeaderLine($line);
         }
